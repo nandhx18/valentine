@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>For My Love ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: radial-gradient(circle at center,#2b1055,#000000);
+    font-family:'Poppins',sans-serif;
+    color:white;
+    transition:1s ease;
+}
+
+/* CAMERA SHAKE */
+.shake{
+    animation: shake 0.6s ease-in-out;
+}
+
+@keyframes shake{
+    0%{transform:translate(0,0);}
+    20%{transform:translate(-10px,10px);}
+    40%{transform:translate(10px,-10px);}
+    60%{transform:translate(-10px,10px);}
+    80%{transform:translate(10px,-10px);}
+    100%{transform:translate(0,0);}
+}
+
+/* Card */
+.card{
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.08);
+    padding:70px 100px;
+    border-radius:30px;
+    text-align:center;
+    box-shadow:0 0 80px rgba(255,0,150,0.3);
+    z-index:2;
+}
+
+h1{
+    font-family:'Cormorant Garamond', serif;
+    font-size:70px;
+    font-weight:700;
+    margin-bottom:40px;
+}
+
+button{
+    padding:15px 45px;
+    font-size:16px;
+    border-radius:50px;
+    border:none;
+    cursor:pointer;
+    margin:15px;
+    transition:0.3s ease;
+}
+
+#yes{
+    background: linear-gradient(45deg,#ff4e88,#ff0066);
+    color:white;
+    box-shadow:0 0 25px rgba(255,0,102,0.7);
+}
+
+#yes:hover{
+    transform:scale(1.2);
+}
+
+#no{
+    background:white;
+    color:black;
+    position:fixed;
+    z-index:10;
+}
+
+/* SUCCESS POPUP WITH ANIMATED BORDER */
+.success{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(0);
+    background:white;
+    color:black;
+    padding:60px 80px;
+    border-radius:30px;
+    text-align:center;
+    z-index:20;
+    border:4px solid transparent;
+    background-clip:padding-box;
+}
+
+.success::before{
+    content:"";
+    position:absolute;
+    top:-4px;
+    left:-4px;
+    right:-4px;
+    bottom:-4px;
+    border-radius:34px;
+    background:linear-gradient(45deg,#ff4e88,#ff0066,#ff99cc,#ffffff);
+    background-size:400% 400%;
+    z-index:-1;
+    animation:borderGlow 4s linear infinite;
+}
+
+@keyframes borderGlow{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.success.active{
+    transform:translate(-50%,-50%) scale(1);
+    animation:floatBox 3s ease-in-out infinite alternate;
+    box-shadow:0 0 60px rgba(255,0,150,0.8);
+}
+
+@keyframes floatBox{
+    from{transform:translate(-50%,-50%) scale(1);}
+    to{transform:translate(-50%,-55%) scale(1.03);}
+}
+
+/* Explosion particles */
+.explode{
+    position:fixed;
+    font-size:30px;
+    animation: explode 5s ease-out forwards;
+    pointer-events:none;
+}
+
+@keyframes explode{
+    0%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1);
+    }
+    100%{
+        opacity:0;
+        transform:translate(var(--x), var(--y)) scale(2);
+    }
+}
+
+/* Confetti */
+.confetti{
+    position:fixed;
+    width:8px;
+    height:14px;
+    top:-20px;
+    animation: confettiFall 5s linear forwards;
+}
+
+@keyframes confettiFall{
+    0%{transform:translateY(0) rotate(0deg);}
+    100%{transform:translateY(110vh) rotate(720deg);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Will you be my Valentine? ❤️</h1>
+    <button id="yes">YES 💕</button>
+</div>
+
+<button id="no">NO 😏</button>
+
+<div class="success" id="success">
+    <h2 style="font-family:'Cormorant Garamond', serif; font-size:40px;">
+        You just made my heart explode with happiness 💖
+    </h2>
+    <p>I promise to love you endlessly.</p>
+</div>
+
+<script>
+
+const noBtn=document.getElementById("no");
+const yesBtn=document.getElementById("yes");
+const success=document.getElementById("success");
+
+/* NO movement */
+noBtn.style.left=(window.innerWidth/2+120)+"px";
+noBtn.style.top=(window.innerHeight/2+80)+"px";
+
+document.addEventListener("mousemove",(e)=>{
+    const rect=noBtn.getBoundingClientRect();
+    const btnX=rect.left+rect.width/2;
+    const btnY=rect.top+rect.height/2;
+
+    const distance=Math.hypot(e.clientX-btnX,e.clientY-btnY);
+
+    if(distance<120){
+        const padding=20;
+        const maxX=window.innerWidth-noBtn.offsetWidth-padding;
+        const maxY=window.innerHeight-noBtn.offsetHeight-padding;
+
+        noBtn.style.left=Math.random()*maxX+"px";
+        noBtn.style.top=Math.random()*maxY+"px";
+    }
+});
+
+/* YES click */
+yesBtn.addEventListener("click",()=>{
+
+    document.body.classList.add("shake");
+    setTimeout(()=>document.body.classList.remove("shake"),600);
+
+    document.body.style.background="radial-gradient(circle,#ff4e88,#000)";
+    success.classList.add("active");
+
+    centerExplosion();
+    explodeEffect();
+    confettiRain();
+});
+
+/* Center burst */
+function centerExplosion(){
+    for(let i=0;i<30;i++){
+        let spark=document.createElement("div");
+        spark.classList.add("explode");
+        spark.innerHTML="💥";
+
+        spark.style.left="50%";
+        spark.style.top="50%";
+
+        let angle=Math.random()*2*Math.PI;
+        let radius=150+Math.random()*200;
+
+        let x=Math.cos(angle)*radius+"px";
+        let y=Math.sin(angle)*radius+"px";
+
+        spark.style.setProperty("--x",x);
+        spark.style.setProperty("--y",y);
+
+        document.body.appendChild(spark);
+        setTimeout(()=>spark.remove(),1500);
+    }
+}
+
+/* Massive 5 sec explosion */
+function explodeEffect(){
+    const emojis=["❤️","🌹","💖","✨","💘","💞","🌸"];
+
+    for(let i=0;i<80;i++){
+        let item=document.createElement("div");
+        item.classList.add("explode");
+        item.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+
+        item.style.left="50%";
+        item.style.top="50%";
+
+        let angle=Math.random()*2*Math.PI;
+        let radius=300+Math.random()*400;
+
+        let x=Math.cos(angle)*radius+"px";
+        let y=Math.sin(angle)*radius+"px";
+
+        item.style.setProperty("--x",x);
+        item.style.setProperty("--y",y);
+
+        document.body.appendChild(item);
+        setTimeout(()=>item.remove(),5000);
+    }
+}
+
+/* Confetti rain */
+function confettiRain(){
+    const colors=["#ff4e88","#ff0066","#ffffff","#ffccff"];
+
+    for(let i=0;i<150;i++){
+        let conf=document.createElement("div");
+        conf.classList.add("confetti");
+        conf.style.left=Math.random()*100+"vw";
+        conf.style.background=colors[Math.floor(Math.random()*colors.length)];
+        conf.style.animationDuration=(Math.random()*3+3)+"s";
+        document.body.appendChild(conf);
+        setTimeout(()=>conf.remove(),5000);
+    }
+}
+
+</script>
+
+</body>
+</html>
